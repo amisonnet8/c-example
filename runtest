@@ -1,0 +1,5 @@
+#!/usr/bin/env bash
+
+set -ex
+
+diff <(src/ab) <(printf "A\nB\n")
