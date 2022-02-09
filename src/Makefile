@@ -21,8 +21,12 @@ $(TARGET) : $(OBJS)
 test: all
 	(cd ..; ./runtest)
 
+coverage:
+	$(MAKE) test CFLAGS+="-coverage -O0"
+	gcov *.c
+
 clean:
-	rm -f $(TARGET) *.d *.o
+	rm -f $(TARGET) *.d *.o *.gcda *.gcno *.gcov
 
 install: all
 	$(INSTALL) -m 0755 -d $(INSTALLBIN)
@@ -33,4 +37,4 @@ uninstall:
 
 -include $(DEPS)
 
-.PHONY: all test clean install uninstall
+.PHONY: all test coverage clean install uninstall

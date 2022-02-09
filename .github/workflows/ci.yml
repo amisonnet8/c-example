@@ -7,12 +7,13 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        compiler:
-          - gcc
-          - clang
     steps:
       - uses: actions/checkout@v2
-      - name: Build and test
-        run: 'make test CC=${{ matrix.compiler }}'
+      - name: gcc
+        run: 'make coverage CC=gcc'
+      - name: clang
+        run: 'make test CC=clang'
+      - name: upload coverage
+        uses: codecov/codecov-action@v1
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
