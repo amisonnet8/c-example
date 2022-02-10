@@ -1,13 +1,18 @@
 TARGET := ab
+
 CC ?= cc
-CFLAGS += -std=c11 -Wall
+RM ?= rm -f
+INSTALL ?= install
+GCOV ?= gcov
+
+CFLAGS += -std=c11 -Wall $(COVERAGE_CFLAGS)
 
 SRCS := $(wildcard *.c)
 OBJS := $(SRCS:.c=.o)
 DEPS := $(OBJS:.o=.d)
 
 PREFIX ?= /usr/local
-INSTALLBIN := $(PREFIX)/bin
+INSTALL_BIN := $(PREFIX)/bin
 INSTALL ?= install
 
 all: $(TARGET)
@@ -22,18 +27,18 @@ test: all
 	(cd ..; ./runtest)
 
 coverage:
-	$(MAKE) test CFLAGS+="-coverage -O0"
-	gcov *.c
+	$(MAKE) test COVERAGE_CFLAGS="-coverage"
+	$(GCOV) *.c
 
 clean:
-	rm -f $(TARGET) *.d *.o *.gcda *.gcno *.gcov
+	$(RM) $(TARGET) *.d *.o *.gcda *.gcno *.gcov
 
 install: all
-	$(INSTALL) -m 0755 -d $(INSTALLBIN)
-	$(INSTALL) -m 0755 $(TARGET) $(INSTALLBIN)
+	$(INSTALL) -m 0755 -d $(INSTALL_BIN)
+	$(INSTALL) -m 0755 $(TARGET) $(INSTALL_BIN)
 
 uninstall:
-	rm -f $(INSTALLBIN)/$(TARGET)
+	$(RM) $(INSTALL_BIN)/$(TARGET)
 
 -include $(DEPS)
 
