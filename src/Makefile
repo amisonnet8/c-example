@@ -13,7 +13,6 @@ DEPS := $(OBJS:.o=.d)
 
 PREFIX ?= /usr/local
 INSTALL_BIN := $(PREFIX)/bin
-INSTALL ?= install
 
 all: $(TARGET)
 
